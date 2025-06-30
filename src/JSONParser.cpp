@@ -1,8 +1,6 @@
 #include "JSONParser.h"
 
 JsonParser::JsonParser(const std::string& input) : m_input(input){}
-JsonParser::~JsonParser(){}
-
 
 void JsonParser::skipWhitespace()
 {
@@ -71,8 +69,6 @@ JsonValue JsonParser::parseNumber()
 {
     std::string numStr;
     bool isDouble = false;
-    bool isExponent = false;
-    
 
     // Handle negative sign
     if (currentChar() == '-') {
@@ -212,11 +208,10 @@ JsonValue JsonParser::parseObject()
     }
     
     while (true) {
-        skipWhitespace();
 
         // Parse key
         if (currentChar() != '"')
-            throw std::runtime_error("Expected string key in object");
+            throw std::runtime_error("Expected string key as first field in object");
 
         std::string key = parseString();
 
@@ -228,7 +223,7 @@ JsonValue JsonParser::parseObject()
         advance();
         skipWhitespace();
 
-        // Parse value (recursive)
+        // Parse value and populate JsonObject (key-value pair)
         JsonValue value = parseValue();
         (*object)[key] = std::move(value);
 

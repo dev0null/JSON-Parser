@@ -16,7 +16,7 @@
 	"hasPremium": false,
 	"license": null,
 	"reports": [],
-	"scientificNotation+": 1e+124,
+	"scientificNotation+": 1.7526e+5,
 	"scientificNotation-": 1e-124,
 	"escaped": "Tabs \t inside\t string"
 }

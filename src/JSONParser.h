@@ -48,7 +48,6 @@ class JsonParser {
 public:
 
     explicit JsonParser(const std::string& input);
-    ~JsonParser();
 
     // Main parsing interface
     JsonValue parseValue();
@@ -66,9 +65,7 @@ private:
     const std::string& m_input;
     size_t m_position = 0;
 
-    /**
-     * @brief Skip all sequential whitespaces (tab, newline, space)
-     */
+    // Skip all sequential whitespaces (tab, newline, space)
     void skipWhitespace();
 
     // Get current character (or null terminator if at end)
