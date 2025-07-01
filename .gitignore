@@ -3,4 +3,5 @@ bin/
 build/
 
 # binary files
-/*.o
+*/*.o
+*/*.d

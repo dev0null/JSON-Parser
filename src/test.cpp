@@ -16,6 +16,7 @@ int main(){
         file.close();
     }
     else {
+        std::cerr << "Could not load file. Loading default JSON\n";
         json = R"(
             {
                 "type": "Example JSON",

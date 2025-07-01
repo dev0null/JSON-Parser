@@ -1,7 +1,7 @@
 {
 	"string": "Example JSON string!",
 	"int": 1,
-	"double": 3.14159,
+	"double": 3.141592653589793,
 	"array": [
 		"element1", 2, 3.5, {
 			"nestedObj": {
@@ -16,7 +16,8 @@
 	"hasPremium": false,
 	"license": null,
 	"reports": [],
-	"scientificNotation+": 1.7526e+5,
+	"scientificNotation+": 1.7526e+124,
 	"scientificNotation-": 1e-124,
-	"escaped": "Tabs \t inside\t string"
+	"escaped": "Tabs \t inside\t string",
+	"unicode": "\u1F427"
 }

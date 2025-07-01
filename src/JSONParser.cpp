@@ -22,6 +22,65 @@ void JsonParser::advance()
         ++m_position;
 }
 
+static std::string codepointToUTF8(unsigned int cp)
+{
+    if (cp <= 0x7F)
+        return {static_cast<char>(cp)};
+
+    
+    auto trail = [](uint8_t byte) {
+        return 0x80 | (byte & 0x3F); // byte(cp) & 0011 1111
+    };
+
+    if (cp <= 0x7FF)
+    {
+        return {
+            static_cast<char>(0xC0 | (cp >> 6)),
+            static_cast<char>(trail(cp))
+        };
+    }
+
+    if (cp <= 0xFFFF)
+    {
+        return {
+            static_cast<char>(0xE0 | (cp >> 12)),
+            static_cast<char>(trail(cp >> 6)),
+            static_cast<char>(trail(cp))
+        };
+    }
+
+    return {
+        static_cast<char>(0xEF | (cp >> 18)),
+        static_cast<char>(trail(cp >> 12)),
+        static_cast<char>(trail(cp >> 6)),
+        static_cast<char>(trail(cp)),
+    };
+}
+
+std::string JsonParser::parseUnicodeEscape()
+{
+    std::string str;
+
+    // Take exactly 4 alphanumeric characters
+    for (int i = 0; i < 4; ++i)
+    {
+        // Check if character is hex
+        if (!std::isxdigit(static_cast<char>( currentChar() )))
+            throw std::runtime_error("Invalid unicode character");
+
+        str += currentChar();
+        if (i < 3) advance();
+    }
+
+    unsigned long codepoint = std::stoul(str, nullptr, 16);
+    try {
+        return codepointToUTF8(codepoint);
+    }
+    catch (...) {
+        throw std::runtime_error("Invalid unicode codepoint");
+    }
+}
+
 std::string JsonParser::parseString()
 {
     if (currentChar() != '"')
@@ -49,6 +108,11 @@ std::string JsonParser::parseString()
                 case 'n':   result += '\n'; break;
                 case 'r':   result += '\r'; break;
                 case 't':   result += '\t'; break;
+                case 'u':
+                    advance();
+                    result += parseUnicodeEscape();
+                    break;
+
                 default:
                     throw std::runtime_error("Invalid escape sequence");
             }
@@ -63,7 +127,6 @@ std::string JsonParser::parseString()
     advance(); // skip closing quote
     return result;
 }
-
 
 JsonValue JsonParser::parseNumber()
 {
@@ -115,7 +178,7 @@ JsonValue JsonParser::parseNumber()
     // Convert to appropriate numeric type
     try {
         if (isDouble)
-            return JsonValue{std::stod(numStr)};
+            return JsonValue{std::strtod(numStr.c_str(), nullptr)};
         else
             return JsonValue{std::stoi(numStr)};
     }

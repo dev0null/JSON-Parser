@@ -65,14 +65,22 @@ private:
     const std::string& m_input;
     size_t m_position = 0;
 
+    ////////// HELPER FUNCTIONS //////////
+
     // Skip all sequential whitespaces (tab, newline, space)
     void skipWhitespace();
-
+    
     // Get current character (or null terminator if at end)
     char currentChar() const;
-
+    
     // Advance to next character
     void advance();
+    
+    
+    ////////// PARSING FUNCTION //////////
+    
+    // Parse a unicode escaped string
+    std::string parseUnicodeEscape();
 
     // Parse a quoted string
     std::string parseString();
