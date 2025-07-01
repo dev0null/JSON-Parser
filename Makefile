@@ -1,24 +1,28 @@
-CXXFLAGS := -Wall -Wextra -O3
-LDFLAGS := 
-OUT := json_parse
+CXX := g++
+CXXFLAGS := -Wall -Wextra -O3 -std=c++17
+LDFLAGS :=
+
+OUTDIR := ./bin
+ASSEMBLY := json_parse
 
 SRC := $(wildcard ./src/*.cpp)
 OBJ := $(SRC:.cpp=.o)
+DEPS := $(SRC:.cpp=.d)
+-include $(DEPS)
 
+all: $(ASSEMBLY)
 
-all: $(OUT)
-
-$(OUT): $(OBJ)
-	g++ $^ -o $@ $(LDFLAGS) 
+$(ASSEMBLY): $(OBJ)
+	$(CXX) $(OBJ) $(LDFLAGS) -o $(OUTDIR)/$@ 
 
 %.o: %.cpp
-	g++ -c $(CXXFLAGS) $< -o $@
+	$(CXX) -MMD -MP -c $(CXXFLAGS) $< -o $@
 
-run: $(OUT)
-	./$(OUT)	
+run: $(ASSEMBLY)
+	$(OUTDIR)/$(ASSEMBLY)	
 
 clean:
-	rm $(OUT) $(OBJ)
+	rm $(OUTDIR)/$(ASSEMBLY) $(OBJ) $(DEPS)
 
 
 .PHONY: all clean run

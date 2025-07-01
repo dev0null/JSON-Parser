@@ -2,6 +2,6 @@
 bin/
 build/
 
-# binary files
+# binary files / dependencies
 */*.o
 */*.d
