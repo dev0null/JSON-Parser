@@ -60,8 +60,10 @@ inline void printValue(const JsonValue& value, int indent){
         std::cout << "\"" << *s << "\"";
     else if (auto i = std::get_if<int>(&val))
         std::cout << *i;
-    else if (auto d = std::get_if<double>(&val))
+    else if (auto d = std::get_if<double>(&val)){
+        std::cout.precision(15);
         std::cout << *d;
+    }
     else if (auto b = std::get_if<bool>(&val))
         std::cout << std::boolalpha << *b;
     else if (std::holds_alternative<std::monostate>(val))
