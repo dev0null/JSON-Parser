@@ -19,5 +19,5 @@
 	"scientificNotation+": 1.7526e+124,
 	"scientificNotation-": 1e-124,
 	"escaped": "Tabs \t inside\t string",
-	"unicode": "\u1F427"
+	"unicode": "\u03c0"
 }
